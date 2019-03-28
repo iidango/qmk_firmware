@@ -23,6 +23,8 @@ extern uint8_t is_master;
 #define _RAISE 2
 #define _ADJUST 3
 
+#define LONG_HOLD_TERM 500    //ms
+
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
@@ -192,6 +194,11 @@ void iota_gfx_task_user(void) {
 }
 #endif//SSD1306OLED
 
+static bool lower_pressed = false;
+static uint16_t lower_pressed_time = 0;
+static bool raise_pressed = false;
+static uint16_t raise_pressed_time = 0;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
 #ifdef SSD1306OLED
@@ -203,27 +210,52 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case QWERTY:
       if (record->event.pressed) {
+        // reset flags
+        lower_pressed = false;
+        raise_pressed = false;
         set_single_persistent_default_layer(_QWERTY);
       }
       return false;
       break;
     case LOWER:
       if (record->event.pressed) {
+        lower_pressed = true;
+        lower_pressed_time = record->event.time;
+
         layer_on(_LOWER);
         update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
       } else {
         layer_off(_LOWER);
         update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
+
+        if (lower_pressed && (TIMER_DIFF_16(record->event.time, lower_pressed_time) < LONG_HOLD_TERM)) {
+          register_code(KC_LANG2);
+          register_code(KC_MHEN);
+          unregister_code(KC_MHEN);
+          unregister_code(KC_LANG2);
+        }
+        lower_pressed = false;
       }
       return false;
       break;
     case RAISE:
       if (record->event.pressed) {
+        raise_pressed = true;
+        raise_pressed_time = record->event.time;
+
         layer_on(_RAISE);
         update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
       } else {
         layer_off(_RAISE);
         update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
+
+        if (raise_pressed && (TIMER_DIFF_16(record->event.time, raise_pressed_time) < LONG_HOLD_TERM)) {
+          register_code(KC_LANG1);
+          register_code(KC_MHEN);
+          register_code(KC_MHEN);
+          unregister_code(KC_LANG1);
+        }
+        raise_pressed = false;
       }
       return false;
       break;
@@ -234,6 +266,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           layer_off(_ADJUST);
         }
         return false;
+        break;
+    default: 
+        if (record->event.pressed) {
+            // reset flags
+            lower_pressed = false;
+            raise_pressed = false;
+        }
         break;
   }
   return true;

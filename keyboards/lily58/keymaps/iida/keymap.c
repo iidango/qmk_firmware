@@ -23,7 +23,7 @@ extern uint8_t is_master;
 #define _RAISE 2
 #define _ADJUST 3
 
-#define LONG_HOLD_TERM 100    //ms
+#define LONG_HOLD_TERM 200    //ms
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,

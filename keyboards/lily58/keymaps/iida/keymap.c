@@ -81,7 +81,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* RAISE    Do not trast comment layout(it is just default)
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * | Sleep|      |      |      |      |      |                    |      |      | Mute |Vol Dw|Vol Up|      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Tab  |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -95,7 +95,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 
 [_RAISE] = LAYOUT( \
-  _______, _______, _______, _______, _______, _______,                     _______, _______, _______, _______, _______, _______, \
+  KC_SLEP, _______, _______, _______, _______, _______,                     _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, _______, \
   KC_TAB,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
   KC_LCTRL, KC_PLUS, KC_MINS, KC_ASTR, KC_SLSH, KC_EQL,                       KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, XXXXXXX, XXXXXXX, \
   KC_LSFT, KC_PIPE, KC_UNDS, KC_TILD, KC_BSLS, _______,   _______, _______,  KC_PLUS, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_RSFT, \
